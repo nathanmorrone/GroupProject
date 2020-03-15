@@ -19,81 +19,57 @@ import java.util.Collections;
  */
 public class SoftDrinkList {
 
-    private final Calendar calendar;
+    private int softDrinkCountByFlavour;
+    private int inventoryQuantity;
     private final int INVENTORY_LIMIT = 20;
-    private final ArrayList<SoftDrink> list = new ArrayList();
+    private Calendar calendar;
+    private ArrayList<SoftDrink> list = new ArrayList<SoftDrink>();
 
     //This should create a new date everytime we run the application. which can be saved
     //to the file each time we create a file and save the each softdrink wiht its expiry date
     public SoftDrinkList() {
+        softDrinkCountByFlavour = 0;
+        inventoryQuantity = 0;
         calendar = Calendar.getInstance();
     }
 
-    public SoftDrinkList(File file) {
-        calendar = Calendar.getInstance();
-    }
-
-    public SoftDrinkList(String string) {
-        calendar = Calendar.getInstance();
-    }
     
-
-
-    //This method will add SoftDrink obejcts to the array list.
     /*GUI interaction: When the user clicks the add button this method will be used.
-    This method will ultimately help add objects/records to a file but WONT save the records*/
-    
-    
+    This method will ultimately help add objects/records to the arrayList/file but WONT save the records*/
     /*Method Note: The soft drink vending machine has a limit on how many cans of pop
     it can have within it. The constant data field "INEVENTORY_LIMIT" resprents
     thhe limit of pop cans able to fit inside the vending machine.
-    */
+     */
     //GUI interaction: Adding
-    public void add(SoftDrink softdrink) {
+    public void add(SoftDrink object) {
 
-        if (list.size() == this.INVENTORY_LIMIT) {
+
+        if (list.size() == INVENTORY_LIMIT) {
             throw new IllegalArgumentException("ERROR: Inventory has reached its limit\n");
         } else {
-            
-            for(int i = 0; i < list.size(); i++){
-                if(list.get(i).getFullName().equals(softdrink.getFullName())){
-                 //body
-                }
-            }
-            list.add(softdrink);      
+            list.add(object);
+            ++inventoryQuantity;
         }
-        
-        
+
     }
 
-    //This method is meant to search for an object/record within and arrayList/file
-    //GUI interaction: Searching
-    public SoftDrink findItemByFullName(String itemFullName) {
-        SoftDrink temp = new SoftDrink();
+    /*This method is feature of our application used to match items that are expired
+    and then remove those items and return them in an array list. We can display to the user what items we have removed
+     */
+    //GUI interaction: Removing expired items adn displaying them to the screen
+    public ArrayList<SoftDrink> removeExpiredItems() {
+
+        ArrayList<SoftDrink> temp = new ArrayList<SoftDrink>();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getFullName().equals(itemFullName)) {
-                temp = list.get(i);
+            
+            if (list.get(i).getExpiryDate().compareTo(String.format("%s/%s/%s",
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH) + 1,
+                    calendar.get(Calendar.DAY_OF_MONTH))) > 0) {
+                temp.add(list.remove(i));
             }
         }
         return temp;
-    }
-
-    /*This method is feature of our application used to match the soft drink with the expiry
-    date that is overdue(item is expired), then remove that item from the list.
-     */
-   //GUI interaction: Removing expired items adn displaying them to the screen
-    public String removeExpiredItems() {
-        String output  = "";
-        for (int i = 0; i < list.size(); i++) {
-
-            if (list.get(i).getExpiryDate().compareTo(String.format("%s/%s/%s",
-                    calendar.get(Calendar.DAY_OF_MONTH),
-                    calendar.get(Calendar.MONTH) + 1,
-                    calendar.get(Calendar.YEAR))) > 0) {
-                output += list.remove(i) + "\n";
-            }
-        }
-        return output;
     }
 
     //This method removes an item from the list 
@@ -111,10 +87,68 @@ public class SoftDrinkList {
 
     }
 
-    //This method sorts the arrayList aplhabetically
-    public void sortList() {
-        Collections.sort(list); //must have Compareable Interface implemented in SoftDrink class for this to work
+    //This method is meant to search for an object/record within and arrayList/file and return the obejct based on their brand name. We will have to validate this
+    //GUI interaction: Searching
+    public SoftDrink findItemByBrand(String brandName) {
+        SoftDrink temp = new SoftDrink();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getBrandName().equals(brandName)) {
+                temp = list.get(i);
+            }
+        }
+        return temp;
+    }
 
+    //This method is meant to search for an objects/records within and arrayList/file and return the obejcts based on their brand name. We will have to validate this
+    //GUI interaction: Searching
+    public ArrayList<SoftDrink> findItemsByBrand(String brandName) {
+        ArrayList<SoftDrink> temp = new ArrayList<SoftDrink>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getBrandName().equals(brandName)) {
+                temp.set(i, list.get(i));
+            }
+        }
+        return temp;
+    }
+
+    /*This method is meant to search for an objects/records within and arrayList/file 
+    and return an arraylist of obejcts based on their flavour. We will have to validate this*/
+    //GUI interaction: Searching
+    public ArrayList<SoftDrink> findItemsByFlavour(String flavour) {
+        ArrayList<SoftDrink> temp = new ArrayList<SoftDrink>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFlavour().equals(flavour)) {
+                temp.set(i, list.get(i));
+            }
+        }
+        return temp;
+    }
+
+    public int getIndexOf(SoftDrink drink) {
+        //returns the index of the element(item object) in the itemList
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFlavour().equals(drink.getFlavour())) {
+                return list.indexOf(list.get(i));
+            }
+        }
+        return -1;
+    }
+
+    //This method returns the number of softdrinks in the inventory based on flavour
+    //This methods return value will be used inside the specfic field for each record/object that is displayed in the textfields 
+    public int getItemQuanityByFlavour(String softDrinkFlavour) {
+
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getFlavour().equals(softDrinkFlavour)) {
+                ++softDrinkCountByFlavour;
+            }
+
+        }
+        return softDrinkCountByFlavour;
+    }
+
+    public int getInventoryQuantity() {
+        return this.inventoryQuantity;
     }
 
     //This method returns the next item in an array list after the current item
@@ -136,17 +170,18 @@ public class SoftDrinkList {
 
     }
 
-    //Dont need to worry about these methods below for now
-    //This method will help load the FILE/arrayList and it RECORDS/obejcts
-    //GUI Interaction: Loading
-    public void loadFromFile(File file) {
+    //This method sorts the arrayList aplhabetically
+    public void sortList() {
+        Collections.sort(list); //must have Compareable Interface implemented in SoftDrink class for this to work
 
     }
 
-    //This method help to save the RECORDS/objects to the FILE/arrayList
-    //GUI Interaction: Saving
-    public void writeToFile(File file) {
+    public int size() {
+        return list.size();
+    }
 
+    public void clear() {
+        list.clear();
     }
 
 }

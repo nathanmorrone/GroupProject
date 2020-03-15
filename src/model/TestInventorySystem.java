@@ -21,20 +21,20 @@ public class TestInventorySystem {
     public static void main(String[] args) {
 
         SoftDrinkList list = new SoftDrinkList();
-        SoftDrink[] y = new SoftDrink[21];
 
-        //Throws exception because vending machine has reached its limit
-        for (int i = 0; i < y.length; i++) {
-            list.add(new SoftDrink());
-        }
-
-        //Correctly shows expiry date format "dayOfMonth/Month/Year"
-        SoftDrink x = new SoftDrink();
         
-       
+        SoftDrink[] y = new SoftDrink[4];
         
-        System.out.println(x.getExpiryDate());
+          list.add(new SoftDrink("Coca-cola", "vanilla"));
+          list.add(new SoftDrink("Coca-cola", "cherry"));
+          list.add(new SoftDrink("Coca-cola", "vanilla"));
+          list.add(new SoftDrink("Coca-cola", "vanilla"));
+      
+      
+        System.out.println(list.getItemQuanityByFlavour("cherry"));
 
+ 
+    
     }
 
 }

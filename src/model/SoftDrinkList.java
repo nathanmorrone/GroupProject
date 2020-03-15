@@ -76,14 +76,22 @@ public class SoftDrinkList {
     public void removeItem(SoftDrink softDrink) {
         list.remove(softDrink);
     }
-
+    
+    
     /*This method will change the current data fields of a Soft Drink.
     The fullName argument is used to check if the object in the 
     list has the same name. based on if thats true, the objectFields variable
     will replace the data fields of the matched object, and save the overwritten
     object to the arrayList */
     //GUI Interatcion: When the user clicks edit, then save. 
-    public void editItem(String fullName, String... objectFields) {
+    public void editItem(SoftDrink softdrink, String...objectFields) {
+        
+        double price;
+        
+        
+        
+        
+ 
 
     }
 

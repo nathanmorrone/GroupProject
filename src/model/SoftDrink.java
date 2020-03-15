@@ -32,7 +32,7 @@ public class SoftDrink implements Comparable<SoftDrink> {
         calendar = Calendar.getInstance(); //This is how we create an instance of Calendar type. Its an immutable class meaning we can create an instance of it althoughn this how we do it.
         brandName = "Unknown name";
         flavour = "Unknown flavour";
-        expiryDate = String.format("%s/%s/%s",calendar.get(Calendar.YEAR),calendar.get(Calendar.DAY_OF_MONTH),calendar.get(Calendar.MONTH) + 1 ); //returns the actually month and date currently. Calendar.MONTH returns the day of the motnhs in array, january(0) being the first element
+        expiryDate = String.format("%s/%s/%s",calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH) ); //returns the actually month and date currently. Calendar.MONTH returns the day of the motnhs in array, january(0) being the first element
         price = 0.0;
     }
 
